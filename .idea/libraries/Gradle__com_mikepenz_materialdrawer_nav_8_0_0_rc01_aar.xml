@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.mikepenz:materialdrawer-nav:8.0.0-rc01@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5aa3ad7376bf0fb8ac90232936312da8/materialdrawer-nav-8.0.0-rc01/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5aa3ad7376bf0fb8ac90232936312da8/materialdrawer-nav-8.0.0-rc01/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/materialdrawer-nav/8.0.0-rc01/60bbc9b9eeabb1096aeffde1588e6990a02ff5b6/materialdrawer-nav-8.0.0-rc01-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/materialdrawer-nav/8.0.0-rc01/97b030fa2188454693db25836a404544e662ea31/materialdrawer-nav-8.0.0-rc01-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

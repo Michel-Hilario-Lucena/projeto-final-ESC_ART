@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Projeto final</string>
+    <string name="login_str_type_name">Digite seu nome</string>
+    <string name="login_str_type_email">Digite seu email</string>
+    <string name="login_str_type_password">Digite sua senha</string>
+    <string name="login_str_type_confirm_password">Confirme sua senha</string>
+    <string name="login_str_button">entrar</string>
+    <string name="login_str_hint_name">seu nome</string>
+    <string name="login_str_hint_email">seu email</string>
+    <string name="login_str_hint_sua_senha">sua senha</string>
+    <string name="str_user_comum">comum</string>
+    <string name="str_user_professor">professor</string>
+    <string name="register_str_buttom">registrar</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_criar_conteudo">criar conteudo</string>
+    <string name="str_sair">Sair</string>
+    <string name="content_description">imagem de conteudo</string>
+    <string name="str_titulo">Titulo (opcional)</string>
+    <string name="str_titulo_hint">titulo</string>
+    <string name="str_texto">Texto do conteudo</string>
+    <string name="str_add_image">adicionar imagem</string>
+
+    <string name="str_gallery">galeria</string>
+    <string name="str_camera">camera</string>
+    <string name="str_home">inicio</string>
+    <string name="str_feed">conteudo</string>
+    <string name="str_open_gallery">abrir camera</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="open">abrir</string>
+    <string name="close">fechar</string>
+    <string name="image_perfil_content_desc">image_perfil</string>
+</resources>
