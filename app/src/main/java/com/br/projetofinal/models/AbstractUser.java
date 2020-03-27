@@ -1,5 +1,7 @@
 package com.br.projetofinal.models;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.Timestamp;
 
 public abstract class AbstractUser {
@@ -8,6 +10,7 @@ public abstract class AbstractUser {
     private String email;
     private Timestamp createdAt;
     private String typeUser;
+    private Bitmap imageProfile;
     public AbstractUser(){}
     public AbstractUser (String name,String email){
         this.name=name;
@@ -43,6 +46,14 @@ public abstract class AbstractUser {
 
     public void setTypeUser(String typeUser) {
         this.typeUser = typeUser;
+    }
+
+    public Bitmap getImageProfile() {
+        return imageProfile;
+    }
+
+    public void setImageProfile(Bitmap imageProfile) {
+        this.imageProfile = imageProfile;
     }
 }
 

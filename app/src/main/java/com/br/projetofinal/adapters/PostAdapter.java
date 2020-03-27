@@ -49,11 +49,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         final Drawable drawable = ContextCompat.getDrawable(context, idBackground);
 
         final String referenceImage = posts.get(position).getImageReference();
-        if(drawable!=null)drawable.setTint(color);
+        if (drawable != null) drawable.setTint(color);
 
         if (referenceImage != null && !referenceImage.isEmpty())
             MySystem.getImageIn(referenceImage, bitmap -> holder.getImageView().setImageBitmap(bitmap));
-
+        else holder.getImageView().getLayoutParams().height = 0;
         holder.getItemView().setBackground(drawable);
         holder.getTitle().setText(posts.get(position).getTitle());
         holder.getText().setText(posts.get(position).getText());
@@ -88,11 +88,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             this.itemView = itemView;
         }
 
-         ImageView getImageView() {
+        ImageView getImageView() {
             return imageView;
         }
 
-         TextView getTitle() {
+        TextView getTitle() {
             return title;
         }
 
@@ -104,7 +104,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             this.text = text;
         }
 
-         View getItemView() {
+        View getItemView() {
             return itemView;
         }
 

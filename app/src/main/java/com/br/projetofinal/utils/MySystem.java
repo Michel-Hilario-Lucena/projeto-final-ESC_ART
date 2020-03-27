@@ -21,25 +21,25 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class MySystem {
     private static final String TAG_PATH_COMMON = AbstractUser.TAG + "/collection_" + Common.TAG + "/" + Common.TAG + "/";
     private static final String TAG_PATH_TEACHER = AbstractUser.TAG + "/collection_" + Teacher.TAG + "/" + Teacher.TAG + "/";
-    private static final String TAG_PATH_POST = "post";
+    private static final String TAG_PATH_POST = "post/" + getEncodedEmail() + "/posts_" + getEncodedEmail() + "/";
+    public static final String PROF_NAME_IMG = "profile_img_" + MySystem.getEmail();
 
     public static void registerUser(AbstractUser user, String password, Activity activity) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(taskComplete -> {
             if (!taskComplete.isSuccessful()) return;
             final FirebaseFirestore ff = FirebaseFirestore.getInstance();
-            final String id = Base64.encodeToString(user.getEmail().getBytes(), Base64.URL_SAFE);
             final String tagUser = (user instanceof Teacher ? Teacher.TAG : Common.TAG);
             user.setCreatedAt(Timestamp.now());
-            ff.document(AbstractUser.TAG + "/" + "collection_" + tagUser + "/" + tagUser + "/" + id).set(user)
+            ff.document(AbstractUser.TAG + "/" + "collection_" + tagUser + "/" + tagUser + "/" + getEncodedEmail()).set(user)
                     .addOnSuccessListener(
                             command -> {
                                 activity.startActivity
@@ -56,31 +56,22 @@ public abstract class MySystem {
             onUserCallBack.onResultUser(null);
             return;
         }
-        final String email = Base64.encodeToString(
-                FirebaseAuth
-                        .getInstance()
-                        .getCurrentUser()
-                        .getEmail()
-                        .getBytes(), Base64.URL_SAFE);
-
-        ff.document(TAG_PATH_COMMON + email).get()
+        ff.document(TAG_PATH_COMMON + getEncodedEmail()).get()
                 .addOnSuccessListener(docCommon -> {
                     if (docCommon.exists())
                         onUserCallBack.onResultUser(docCommon.toObject(Common.class));
-                    else ff.document(TAG_PATH_TEACHER + email).get()
+                    else ff.document(TAG_PATH_TEACHER + getEncodedEmail()).get()
                             .addOnSuccessListener(docTeacher -> onUserCallBack.onResultUser(docTeacher.toObject(Teacher.class)));
                 });
     }
 
     public static void getUserByEmail(String email, OnUserCallBack onUserCallBack) {
         final FirebaseFirestore ff = FirebaseFirestore.getInstance();
-        final String encodedEmail = Base64.encodeToString(email.getBytes(), Base64.URL_SAFE);
-
-        ff.document(TAG_PATH_COMMON + encodedEmail).get()
+        ff.document(TAG_PATH_COMMON + getEncodedEmail()).get()
                 .addOnSuccessListener(docCommon -> {
                     if (docCommon.exists())
                         onUserCallBack.onResultUser(docCommon.toObject(Common.class));
-                    else ff.document(TAG_PATH_TEACHER + encodedEmail).get()
+                    else ff.document(TAG_PATH_TEACHER + getEncodedEmail()).get()
                             .addOnSuccessListener(docTeacher ->
                                     onUserCallBack.onResultUser(docCommon.toObject(Teacher.class)));
                 });
@@ -108,37 +99,65 @@ public abstract class MySystem {
         });
     }
 
+
     public static void getAllPost(OnPostsCallBack onPostsCallBack) {
         final FirebaseFirestore ff = FirebaseFirestore.getInstance();
-        ff.collection(MySystem.TAG_PATH_POST).get().addOnSuccessListener(command -> {
-            final List<Post> posts = new ArrayList<>();
-            for (DocumentSnapshot ds : command.getDocuments()) posts.add(ds.toObject(Post.class));
-            onPostsCallBack.result(posts);
-        });
+
+        ff.collection(TAG_PATH_COMMON).get().addOnSuccessListener(common ->
+                ff.collection(TAG_PATH_TEACHER).get().addOnSuccessListener(teacher -> {
+                    ArrayList<Post> posts = new ArrayList<>();
+                    for (QueryDocumentSnapshot qds : common)
+                        ff.collection(getPostOf(qds.getId())).get().addOnSuccessListener(command -> {
+                                    for (DocumentSnapshot ds : command) posts.add(ds.toObject(Post.class));
+                                    for (DocumentSnapshot docs : teacher)
+                                        ff.collection(getPostOf(docs.getId())).get().addOnSuccessListener(command_ -> {
+                                                    for (DocumentSnapshot ds : command_)
+                                                        posts.add(ds.toObject(Post.class));
+                                                    onPostsCallBack.result(posts);
+                                                }
+                                        );
+                                }
+                        );
+
+                }));
     }
 
     public static void saveImageFile(File file) {
         final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         firebaseStorage.getReference()
                 .child(file.getName())
-                .putFile(Uri.fromFile(file))
-                .addOnCompleteListener(command -> Log.i("TESTE", command.isSuccessful() ? "sucesso" : command.getException().getMessage()));
+                .putFile(Uri.fromFile(file));
     }
 
     public static void saveImageBytes(byte[] bytes, String name) {
         final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         firebaseStorage.getReference()
                 .child(name)
-                .putBytes(bytes)
-                .addOnCompleteListener(command -> Log.i("TESTE", command.isSuccessful() ? "sucesso" : command.getException().getMessage()));
+                .putBytes(bytes);
     }
 
     public static void getImageIn(String path, OnImageCallBack onImageCallBack) {
         final FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        final long max_3MB = 3_000_072;
-        firebaseStorage.getReference(path).getBytes(max_3MB)
+        final long max3MB = 3_000_072;
+        firebaseStorage.getReference(path).getBytes(max3MB)
                 .addOnSuccessListener(
                         bytes -> onImageCallBack.resultImage(BitmapFactory.decodeByteArray(bytes, 0, bytes.length))
                 );
+    }
+
+    private static String getEmail() {
+        return FirebaseAuth.getInstance().getCurrentUser().getEmail();
+    }
+
+    private static String getPostOf(String email) {
+        return "post/" + getEncodedEmail() + "/posts_" + getEncodedEmail() + "/";
+    }
+
+    private static String getEncodedEmail() {
+        return Base64.encodeToString(MySystem.getEmail().getBytes(), Base64.URL_SAFE);
+    }
+
+    private static String encodeEmail(String email) {
+        return Base64.encodeToString(email.getBytes(), Base64.URL_SAFE);
     }
 }

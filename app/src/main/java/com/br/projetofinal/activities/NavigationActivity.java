@@ -19,6 +19,7 @@ import com.br.projetofinal.fragments.PerfilFragment;
 import com.br.projetofinal.fragments.PessoasFragment;
 import com.br.projetofinal.fragments.SettingsFragment;
 import com.br.projetofinal.fragments.StartFragment;
+import com.br.projetofinal.utils.MySystem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -49,7 +50,7 @@ public class NavigationActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new PessoasFragment()).commit();
                     break;
                 case R.id.menu_item_config:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new SettingsFragment()).commit();
+                    startActivity(new Intent(this,SettingsFragment.class));
                     break;
                 default:
                     FirebaseAuth.getInstance().signOut();
@@ -58,11 +59,14 @@ public class NavigationActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
-        navigationView.getHeaderView(0).findViewById(R.id.imageView3).setClipToOutline(true);
+        final ImageView profImg=navigationView.getHeaderView(0).findViewById(R.id.imageView3);
+        profImg.setClipToOutline(true);
+        MySystem.getImageIn(MySystem.PROF_NAME_IMG, profImg::setImageBitmap);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new StartFragment()).commit();
             navigationView.setCheckedItem(R.id.menu_item_inicio);
         }
+
     }
 
     @Override
