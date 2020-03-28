@@ -17,6 +17,7 @@ import com.br.projetofinal.models.AbstractUser;
 import com.br.projetofinal.models.Common;
 import com.br.projetofinal.models.Post;
 import com.br.projetofinal.models.Teacher;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,11 +27,14 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public abstract class MySystem {
     private static final String TAG_PATH_COMMON = AbstractUser.TAG + "/collection_" + Common.TAG + "/" + Common.TAG + "/";
     private static final String TAG_PATH_TEACHER = AbstractUser.TAG + "/collection_" + Teacher.TAG + "/" + Teacher.TAG + "/";
-    private static final String TAG_PATH_POST = "post/" + getEncodedEmail() + "/posts_" + getEncodedEmail() + "/";
+    private static final String TAG_PATH_POST = "/post/" + getEncodedEmail() + "/posts_" + getEncodedEmail() + "/";
     public static final String PROF_NAME_IMG = "profile_img_" + MySystem.getEmail();
 
     public static void registerUser(AbstractUser user, String password, Activity activity) {
@@ -93,33 +97,24 @@ public abstract class MySystem {
 
     public static void createPost(Post post) {
         final FirebaseFirestore ff = FirebaseFirestore.getInstance();
-        ff.collection(TAG_PATH_POST).document().set(post).addOnCompleteListener(command -> {
-            if (command.isSuccessful()) Log.i("TESTE", "Sucesso ao criar post");
-            else Log.i("TESTE", "falha:" + command.getException().getMessage());
-        });
+        final Map<String, Object> map = new HashMap<>();
+        map.put("last_post", Timestamp.now());
+        ff.document("post/" + getEncodedEmail()).set(map);
+        ff.collection(TAG_PATH_POST)
+                .document()
+                .set(post)
+                .addOnCompleteListener(cmd -> Log.i("TESTE", cmd.isSuccessful() ? "sucesso" : "falha"));
     }
 
-
-    public static void getAllPost(OnPostsCallBack onPostsCallBack) {
+    public static void getPost(OnPostsCallBack onPostsCallBack) {
         final FirebaseFirestore ff = FirebaseFirestore.getInstance();
-
-        ff.collection(TAG_PATH_COMMON).get().addOnSuccessListener(common ->
-                ff.collection(TAG_PATH_TEACHER).get().addOnSuccessListener(teacher -> {
-                    ArrayList<Post> posts = new ArrayList<>();
-                    for (QueryDocumentSnapshot qds : common)
-                        ff.collection(getPostOf(qds.getId())).get().addOnSuccessListener(command -> {
-                                    for (DocumentSnapshot ds : command) posts.add(ds.toObject(Post.class));
-                                    for (DocumentSnapshot docs : teacher)
-                                        ff.collection(getPostOf(docs.getId())).get().addOnSuccessListener(command_ -> {
-                                                    for (DocumentSnapshot ds : command_)
-                                                        posts.add(ds.toObject(Post.class));
-                                                    onPostsCallBack.result(posts);
-                                                }
-                                        );
-                                }
-                        );
-
-                }));
+        Log.i("TESTE", "init");
+        ff.collection("post").get().addOnSuccessListener(command -> {
+            for (DocumentSnapshot ds : command)
+                ff.collection(getPostsOf(ds.getId())).get().addOnSuccessListener(cmd -> {
+                    for (Post post : cmd.toObjects(Post.class)) onPostsCallBack.result(post);
+                });
+        });
     }
 
     public static void saveImageFile(File file) {
@@ -146,18 +141,14 @@ public abstract class MySystem {
     }
 
     private static String getEmail() {
-        return FirebaseAuth.getInstance().getCurrentUser().getEmail();
-    }
-
-    private static String getPostOf(String email) {
-        return "post/" + getEncodedEmail() + "/posts_" + getEncodedEmail() + "/";
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
     }
 
     private static String getEncodedEmail() {
         return Base64.encodeToString(MySystem.getEmail().getBytes(), Base64.URL_SAFE);
     }
 
-    private static String encodeEmail(String email) {
-        return Base64.encodeToString(email.getBytes(), Base64.URL_SAFE);
+    private static String getPostsOf(String id) {
+        return "/post/" + id + "/posts_" + id + "/";
     }
 }

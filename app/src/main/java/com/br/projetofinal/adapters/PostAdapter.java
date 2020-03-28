@@ -20,15 +20,11 @@ import com.br.projetofinal.R;
 import com.br.projetofinal.models.Post;
 import com.br.projetofinal.utils.MySystem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
-    private final List<Post> posts;
-
-    public PostAdapter(List<Post> posts) {
-        this.posts = posts;
-    }
-
+    private final List<Post> posts=new ArrayList<>();
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,6 +58,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    public List<Post> getPosts() {
+        return posts;
     }
 
     class PostViewHolder extends RecyclerView.ViewHolder {

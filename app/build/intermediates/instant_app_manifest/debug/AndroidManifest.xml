@@ -52,6 +52,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.br.projetofinal.activities.SettingsActivity"
+            android:parentActivityName="com.br.projetofinal.activities.NavigationActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

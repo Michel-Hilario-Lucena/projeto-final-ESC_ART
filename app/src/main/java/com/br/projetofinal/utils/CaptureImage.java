@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,19 +28,18 @@ public class CaptureImage {
 
 
     public static void openCamera(Activity activity) {
-        openCamera(activity,null);
+        openCamera(activity, null);
     }
-    public static void openCamera(Activity activity,String nameFile) {
+
+    public static void openCamera(Activity activity, String nameFile) {
         final Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (pictureIntent.resolveActivity(activity.getPackageManager()) != null) {
             final File imageFile;
             try {
                 @SuppressLint("SimpleDateFormat")
-                final String currentNameFile = nameFile==null?
-                        "IMG" + new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()):
-                        nameFile;
+                final String currentNameFile = "IMG_" + new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
                 final File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                imageFile = File.createTempFile(currentNameFile, ".jpg", storageDir);
+                imageFile = File.createTempFile(nameFile!=null?nameFile:currentNameFile, ".jpg", storageDir);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -54,6 +51,7 @@ public class CaptureImage {
             activity.startActivityForResult(pictureIntent, imageRequestCode);
         }
     }
+
     public static void openGallery(Activity activity) {
         final Intent galleryIntent = new Intent(Intent.ACTION_PICK);
         galleryIntent.setType("image/");
@@ -83,7 +81,7 @@ public class CaptureImage {
                 try (FileInputStream fis = new FileInputStream(image)) {
                     final Bitmap bitmap = BitmapFactory.decodeStream(fis);
                     imageView.setImageBitmap(bitmap);
-                    Toast.makeText(activity,"deveria ir :/",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "deveria ir :/", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -97,7 +95,6 @@ public class CaptureImage {
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 75, stream);
                         CaptureImage.resultGallery = stream.toByteArray();
                         imageView.setImageBitmap(bitmap);
-                        Toast.makeText(activity,"deveria ir :/",Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

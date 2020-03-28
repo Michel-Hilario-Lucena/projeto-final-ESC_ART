@@ -6,5 +6,5 @@ import java.util.List;
 
 @FunctionalInterface
 public interface OnPostsCallBack {
-    void result(List<Post> posts);
+    void result(Post posts);
 }

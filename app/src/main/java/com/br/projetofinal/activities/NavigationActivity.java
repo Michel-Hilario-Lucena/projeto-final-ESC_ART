@@ -8,16 +8,17 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.br.projetofinal.R;
 import com.br.projetofinal.fragments.PerfilFragment;
 import com.br.projetofinal.fragments.PessoasFragment;
-import com.br.projetofinal.fragments.SettingsFragment;
 import com.br.projetofinal.fragments.StartFragment;
 import com.br.projetofinal.utils.MySystem;
 import com.google.android.material.navigation.NavigationView;
@@ -50,18 +51,23 @@ public class NavigationActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new PessoasFragment()).commit();
                     break;
                 case R.id.menu_item_config:
-                    startActivity(new Intent(this,SettingsFragment.class));
+                    startActivity(new Intent(this, SettingsActivity.class));
                     break;
                 default:
                     FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
-        final ImageView profImg=navigationView.getHeaderView(0).findViewById(R.id.imageView3);
+        final ImageView profImg = navigationView.getHeaderView(0).findViewById(R.id.imageView3);
         profImg.setClipToOutline(true);
         MySystem.getImageIn(MySystem.PROF_NAME_IMG, profImg::setImageBitmap);
+        MySystem.getThisUser(user -> {
+            ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView7)).setText(user.getName());
+            ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView10)).setText(user.getEmail());
+        });
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new StartFragment()).commit();
             navigationView.setCheckedItem(R.id.menu_item_inicio);

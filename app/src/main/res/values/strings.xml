@@ -31,5 +31,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="open">abrir</string>
     <string name="close">fechar</string>
-    <string name="image_perfil_content_desc">image_perfil</string>
+    <string name="image_perfil_content_desc">imagem de perfil</string>
+    <string name="str_editar">Editar</string>
+    <string name="str_image_do_post">image do post</string>
 </resources>
