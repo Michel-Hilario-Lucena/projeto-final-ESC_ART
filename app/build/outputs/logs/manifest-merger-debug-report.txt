@@ -183,10 +183,10 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] C:\Users\Mi
 		ADDED from C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:13:9-35
 	android:theme
 		ADDED from C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:18:9-40
-activity#com.br.projetofinal.fragments.StartFragment
-ADDED from C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:9-60
+activity#com.br.projetofinal.fragments.MainFragment
+ADDED from C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:9-59
 	android:name
-		ADDED from C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:19-58
+		ADDED from C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:19-57
 activity#com.br.projetofinal.activities.CreateContentActivity
 ADDED from C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:20:9-22:75
 	android:parentActivityName

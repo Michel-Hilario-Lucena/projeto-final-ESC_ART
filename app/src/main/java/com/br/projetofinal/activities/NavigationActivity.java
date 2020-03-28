@@ -8,8 +8,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +17,7 @@ import android.widget.TextView;
 import com.br.projetofinal.R;
 import com.br.projetofinal.fragments.PerfilFragment;
 import com.br.projetofinal.fragments.PessoasFragment;
-import com.br.projetofinal.fragments.StartFragment;
+import com.br.projetofinal.fragments.MainFragment;
 import com.br.projetofinal.utils.MySystem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +40,7 @@ public class NavigationActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menu_item_inicio:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new StartFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new MainFragment()).commit();
                     break;
                 case R.id.menu_item_perfil:
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new PerfilFragment()).commit();
@@ -69,7 +67,7 @@ public class NavigationActivity extends AppCompatActivity {
             ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView10)).setText(user.getEmail());
         });
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new StartFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_host, new MainFragment()).commit();
             navigationView.setCheckedItem(R.id.menu_item_inicio);
         }
 

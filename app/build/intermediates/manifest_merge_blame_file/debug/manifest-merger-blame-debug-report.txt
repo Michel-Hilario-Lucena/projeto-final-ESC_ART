@@ -71,9 +71,9 @@
 39        android:testOnly="true"
 40        android:theme="@style/AppTheme" >
 40-->C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:18:9-40
-41        <activity android:name="com.br.projetofinal.fragments.StartFragment" />
-41-->C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:9-60
-41-->C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:19-58
+41        <activity android:name="com.br.projetofinal.fragments.MainFragment" />
+41-->C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:9-59
+41-->C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:19:19-57
 42        <activity
 42-->C:\Users\Miche\AndroidStudioProjects\Projetofinal\app\src\main\AndroidManifest.xml:20:9-22:75
 43            android:name="com.br.projetofinal.activities.CreateContentActivity"

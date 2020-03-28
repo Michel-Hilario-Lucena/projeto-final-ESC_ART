@@ -2,19 +2,14 @@ package com.br.projetofinal.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,22 +46,12 @@ public class CreateContentActivity extends AppCompatActivity {
             }, 0);
 
         final Button addImage = findViewById(R.id.create_content_add_image);
-        final ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout3);
         final EditText title = findViewById(R.id.create_content_title);
         final EditText text = findViewById(R.id.create_content_text);
         final Button createButton = findViewById(R.id.create_content_button);
         final Button openCamera = findViewById(R.id.create_content_open_camera);
 
         imageView = findViewById(R.id.create_content_imageView);
-
-        constraintLayout.setOutlineProvider(new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                float radius = 25 * Resources.getSystem().getDisplayMetrics().density;
-                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
-            }
-        });
-        constraintLayout.setClipToOutline(true);
 
         addImage.setOnClickListener(view -> {
             if (ContextCompat.checkSelfPermission
