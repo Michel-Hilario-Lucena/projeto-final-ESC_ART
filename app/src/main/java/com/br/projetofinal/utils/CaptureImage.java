@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
@@ -81,7 +80,6 @@ public class CaptureImage {
                 try (FileInputStream fis = new FileInputStream(image)) {
                     final Bitmap bitmap = BitmapFactory.decodeStream(fis);
                     imageView.setImageBitmap(bitmap);
-                    Toast.makeText(activity, "deveria ir :/", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

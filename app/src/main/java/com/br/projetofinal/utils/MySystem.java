@@ -69,15 +69,15 @@ public abstract class MySystem {
                 });
     }
 
-    public static void getUserByEmail(String email, OnUserCallBack onUserCallBack) {
+    public static void getUserById(String id, OnUserCallBack onUserCallBack) {
         final FirebaseFirestore ff = FirebaseFirestore.getInstance();
-        ff.document(TAG_PATH_COMMON + getEncodedEmail()).get()
+        ff.document(TAG_PATH_COMMON + id).get()
                 .addOnSuccessListener(docCommon -> {
                     if (docCommon.exists())
                         onUserCallBack.onResultUser(docCommon.toObject(Common.class));
-                    else ff.document(TAG_PATH_TEACHER + getEncodedEmail()).get()
+                    else ff.document(TAG_PATH_TEACHER + id).get()
                             .addOnSuccessListener(docTeacher ->
-                                    onUserCallBack.onResultUser(docCommon.toObject(Teacher.class)));
+                                    onUserCallBack.onResultUser(docTeacher.toObject(Teacher.class)));
                 });
     }
 
@@ -144,7 +144,7 @@ public abstract class MySystem {
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
     }
 
-    private static String getEncodedEmail() {
+    public static String getEncodedEmail() {
         return Base64.encodeToString(MySystem.getEmail().getBytes(), Base64.URL_SAFE);
     }
 

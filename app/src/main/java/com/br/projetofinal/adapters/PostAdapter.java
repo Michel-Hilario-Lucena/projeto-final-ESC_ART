@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +24,11 @@ import com.br.projetofinal.utils.MySystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
-    private final List<Post> posts=new ArrayList<>();
+    private final List<Post> posts = new ArrayList<>();
+
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,24 +39,32 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         final int idBackground =
                 position % 2 == 0 ? R.drawable.post_background_bottom : R.drawable.post_background_top,
-                range1 = 126, range2 = 127;
-        final int color = Color.rgb((int) (
-                        Math.random() * range1 + range2),
-                (int) (Math.random() * range1 + range2),
-                (int) (Math.random() * range1 + range2)
-        );
-        final Context context = holder.getItemView().getContext();
-        final Drawable drawable = ContextCompat.getDrawable(context, idBackground);
-
+                range1 = 126, range2 = 126;
+         double[] rgb={Math.random() * range1 + range2,Math.random() * range1 + range2,Math.random() * range1 + range2};
+        int color = Color.rgb((int)rgb[0],(int)rgb[1],(int)rgb[2]);
+        final Context context = holder.itemView.getContext();
+        Drawable drawable = ContextCompat.getDrawable(context, idBackground);
         final String referenceImage = posts.get(position).getImageReference();
-        if (drawable != null) drawable.setTint(color);
+        final byte[] bytesId = Base64.decode(posts.get(position).getIdUser(), Base64.URL_SAFE);
+        final String emailUser = new String(bytesId);
 
+        if (drawable != null) drawable.setTint(color);
         if (referenceImage != null && !referenceImage.isEmpty())
-            MySystem.getImageIn(referenceImage, bitmap -> holder.getImageView().setImageBitmap(bitmap));
-        else holder.getImageView().getLayoutParams().height = 0;
-        holder.getItemView().setBackground(drawable);
-        holder.getTitle().setText(posts.get(position).getTitle());
-        holder.getText().setText(posts.get(position).getText());
+            MySystem.getImageIn(referenceImage, holder.imagePost::setImageBitmap);
+        else holder.imagePost.getLayoutParams().height = 0;
+
+
+        MySystem.getUserById(posts.get(position).getIdUser(), user -> holder.nameUser.setText(user.getName()));
+        MySystem.getImageIn("profile_img_" + emailUser, holder.imageProfile::setImageBitmap);
+        holder.itemView.setBackground(drawable);
+
+        color=Color.rgb((int)rgb[0]-40,(int)rgb[1]-40,(int)rgb[2]-40);
+        drawable = ContextCompat.getDrawable(context, R.drawable.round_template);
+        if (drawable != null) drawable.setTint(color);
+        holder.itemView.findViewById(R.id.constraintLayout3).setBackground(drawable);
+
+        holder.title.setText(posts.get(position).getTitle());
+        holder.text.setText(posts.get(position).getText());
     }
 
     @Override
@@ -65,7 +77,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView imageView;
+        private final ImageView imagePost;
+        private final ImageView imageProfile;
+        private TextView nameUser;
         private TextView title;
         private TextView text;
         private final View itemView;
@@ -74,39 +88,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             super(itemView);
             this.title = itemView.findViewById(R.id.item_post_title);
             this.text = itemView.findViewById(R.id.item_post_text);
-            this.imageView = itemView.findViewById(R.id.imageView2);
-            this.imageView.setOutlineProvider(new ViewOutlineProvider() {
+            this.imagePost = itemView.findViewById(R.id.item_post_img);
+            this.imagePost.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
                     final float value = 25 * Resources.getSystem().getDisplayMetrics().density;
                     outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), value);
                 }
             });
-            ImageView imageProfile = itemView.findViewById(R.id.imageView);
+            imageProfile = itemView.findViewById(R.id.item_post_img_profile);
             imageProfile.setClipToOutline(true);
-            this.imageView.setClipToOutline(true);
+            this.imagePost.setClipToOutline(true);
+            nameUser = itemView.findViewById(R.id.item_post_name_user);
             this.itemView = itemView;
         }
-
-        ImageView getImageView() {
-            return imageView;
-        }
-
-        TextView getTitle() {
-            return title;
-        }
-
-        public TextView getText() {
-            return text;
-        }
-
-        public void setText(TextView text) {
-            this.text = text;
-        }
-
-        View getItemView() {
-            return itemView;
-        }
-
     }
 }
