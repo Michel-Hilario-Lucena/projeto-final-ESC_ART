@@ -3,6 +3,7 @@ package com.br.projetofinal.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,10 @@ public class SettingsActivity extends AppCompatActivity {
                     CaptureImage.openGallery(this);
             }
             return false;
+        });
+        MySystem.getThisUser(user -> {
+            ((TextView)findViewById(R.id.settings_name)).setText(user.getName());
+            ((TextView)findViewById(R.id.settings_email)).setText(user.getEmail());
         });
     }
 

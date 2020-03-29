@@ -7,7 +7,7 @@
     <string name="login_str_button">entrar</string>
     <string name="login_str_hint_name">seu nome</string>
     <string name="login_str_hint_email">seu email</string>
-    <string name="login_str_hint_sua_senha">sua senha</string>
+    <string name="login_str_hint_password">sua senha</string>
     <string name="str_user_comum">comum</string>
     <string name="str_user_professor">professor</string>
     <string name="register_str_buttom">registrar</string>
@@ -34,4 +34,5 @@
     <string name="image_perfil_content_desc">imagem de perfil</string>
     <string name="str_editar">Editar</string>
     <string name="str_image_do_post">image do post</string>
+    <string name="str_settings">Configurações</string>
 </resources>

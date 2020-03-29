@@ -62,24 +62,26 @@
         app:layout_constraintStart_toEndOf="@+id/cardView2">
 
         <EditText
-            android:id="@+id/textView14"
-            android:layout_width="match_parent"
+            android:id="@+id/settings_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
             android:enabled="false"
+            android:hint="@android:string/unknownName"
+            android:importantForAutofill="no"
             android:inputType="text"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text=""
-            android:textSize="16sp"
-            android:importantForAutofill="no" />
+            android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/textView15"
-            android:layout_width="match_parent"
+            android:id="@+id/settings_email"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
             android:enabled="false"
+            android:hint="@android:string/unknownName"
             android:importantForAutofill="no"
             android:inputType="textWebEmailAddress"
             android:paddingLeft="10dp"
@@ -110,5 +112,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back_white_24dp" />
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:title="@string/str_settings"
+        app:titleTextColor="#FFFFFF" />
 </androidx.constraintlayout.widget.ConstraintLayout>

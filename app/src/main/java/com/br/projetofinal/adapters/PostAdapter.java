@@ -6,25 +6,20 @@ import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.br.projetofinal.R;
 import com.br.projetofinal.models.Post;
 import com.br.projetofinal.utils.MySystem;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private final List<Post> posts = new ArrayList<>();
@@ -32,37 +27,44 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new PostViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false));
+        return new PostViewHolder(
+                LayoutInflater
+                        .from(parent.getContext())
+                        .inflate(R.layout.item_post, parent, false)
+        );
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         final int idBackground =
                 position % 2 == 0 ? R.drawable.post_background_bottom : R.drawable.post_background_top,
-                range1 = 126, range2 = 126;
-         double[] rgb={Math.random() * range1 + range2,Math.random() * range1 + range2,Math.random() * range1 + range2};
-        int color = Color.rgb((int)rgb[0],(int)rgb[1],(int)rgb[2]);
+                range1 = 106, range2 = 146;
         final Context context = holder.itemView.getContext();
         Drawable drawable = ContextCompat.getDrawable(context, idBackground);
+        double[] rgb = {
+                Math.random() * range1 + range2,
+                Math.random() * range1 + range2,
+                Math.random() * range1 + range2
+        };
         final String referenceImage = posts.get(position).getImageReference();
         final byte[] bytesId = Base64.decode(posts.get(position).getIdUser(), Base64.URL_SAFE);
         final String emailUser = new String(bytesId);
 
-        if (drawable != null) drawable.setTint(color);
+        if (drawable != null) drawable.setTint(Color.rgb((int) rgb[0], (int) rgb[1], (int) rgb[2]));
         if (referenceImage != null && !referenceImage.isEmpty())
             MySystem.getImageIn(referenceImage, holder.imagePost::setImageBitmap);
         else holder.imagePost.getLayoutParams().height = 0;
 
-
         MySystem.getUserById(posts.get(position).getIdUser(), user -> holder.nameUser.setText(user.getName()));
         MySystem.getImageIn("profile_img_" + emailUser, holder.imageProfile::setImageBitmap);
         holder.itemView.setBackground(drawable);
-
-        color=Color.rgb((int)rgb[0]-40,(int)rgb[1]-40,(int)rgb[2]-40);
-        drawable = ContextCompat.getDrawable(context, R.drawable.round_template);
-        if (drawable != null) drawable.setTint(color);
+        {
+            for (int i = 0; i < rgb.length; i++) rgb[i] -= 40;
+            drawable = ContextCompat.getDrawable(context, R.drawable.round_template);
+            if (drawable != null)
+                drawable.setTint(Color.rgb((int) rgb[0], (int) rgb[1], (int) rgb[2]));
+        }
         holder.itemView.findViewById(R.id.constraintLayout3).setBackground(drawable);
-
         holder.title.setText(posts.get(position).getTitle());
         holder.text.setText(posts.get(position).getText());
     }
